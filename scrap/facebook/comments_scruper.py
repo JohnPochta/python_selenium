@@ -8,7 +8,7 @@ from pprint import pprint
 
 browser = webdriver.Chrome("C:/Users/johnp/chromedriver_win32/chromedriver.exe")
 
-def login_facebook1(email, password):
+def login_facebook1(email, password): #this function was made for login in facebook.
     url = u'https://www.facebook.com/login.php'
     browser.get(url)
     time.sleep(1)
@@ -18,14 +18,13 @@ def login_facebook1(email, password):
     password_log_field.send_keys(password)
     login_button = browser.find_element_by_id('loginbutton')
     login_button.click()
-def facebook_go(id_):
-    #user_id = 'sofia.shumel' #input("Input id of user")
+def facebook_go(id_):#this function was made for making a requests to facebook from webdriver, so it takes a part of url which will be pasted after facebook.com in request path
     user_id = id_
     url = u'https://www.facebook.com/'
     browser.get(url+user_id) 
     browser.find_element_by_tag_name('body').click()
-def read_login_info():
-    f = open('C:/Users/johnp/Desktop/dotenv.txt', 'r')
+def read_login_info(): #this function was made for reading user login and password data from file in some path. File must have two lines: first line is email, second is password 
+    f = open('path_to_file', 'r')
     email = f.readline()
     email = email.replace("\r","")
     email = email.replace("\n","")
@@ -34,7 +33,7 @@ def read_login_info():
     password = password.replace("\n","")
     f.close()
     return [email,password]
-def items_analizator(items):
+def items_analizator(items):#
     reactions = {}
     topics = []
     for elem in items:
@@ -84,17 +83,9 @@ def items_analizator(items):
             ) 
         reactions[topic] = topic_info
     return reactions
-def read_dataset():
-    #f = open('C:/Users/johnp/Desktop/set.txt', 'r')
+def read_dataset():#this function read a dataset, which in this example consist of list, which elements is id's of facebook posts for analysis
     f1 = open('C:/Users/johnp/Downloads/saakashvili_post_ids_01_09_16_28_02_17_01_ (1).json')
     data = json.loads(f1.read())
-    #for elem in data:
-    #    print(elem)
-    #sposts = []
-    #content = f.readlines()
-    #f.close()
-    #content = [x.strip() for x in content]
-    #return content
     return data
 def comment_object_builder(elem):
     actions = ActionChains(browser)
@@ -123,6 +114,14 @@ def comment_object_builder(elem):
         comment['reactions'] = None
     return comment
 def replies(list_):
+#The main task of this script it's to Collect the information. 
+#And one of the most important things in collection information try to save association between collected data
+#So, when we process the comments we have to process replies to this comments too,
+#and have to highlight affiliation between list of replies and particular comment.
+#So, this function was made for processing all replies for particular comment 
+#and returning results of their processing like a list of replies, every element of which - 
+#has a same structure to structure of processed comment, but withoul field "replies")))0
+#Try to understand this!
     comments = []
     for elem in list_:
         comment = comment_object_builder(elem)
